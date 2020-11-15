@@ -12,18 +12,19 @@
 - Bids
 - Comments
 - Categories
+- Watchlist_items
 
 ![models](design_images/models.PNG)
 
 ## Database info needed per page
-- Active listings
-- Category list
-- Category page
-- Listing page
-- Login page
-- Register page
-- Create auction page
-- Watchlist page
+- Active listings: all auctions
+- Category list: All categories
+- Category page: all auctions in that category
+- Listing page: that auction info, bids on that auction, comments on that auction
+- Login page: users, to check if username and password are valid
+- Register page: All users (to check if username is not used yet), auctions(to check if title is not yet used)
+- Create auction page: current user, categories (to create dropdown menu)
+- Watchlist page: current user, Watchlist_items for that user, auctions that the users watchlist_items correspond with
 
 ## Arrow diagram
 ![arrow diagram](design_images/Commerce_pijltjes.png)
