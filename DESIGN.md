@@ -12,6 +12,7 @@
 - Bids
 - Comments
 - Categories
+
 ![models](design_images/models.PNG)
 
 ## Database info needed per page
