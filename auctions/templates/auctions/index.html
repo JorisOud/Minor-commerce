@@ -2,9 +2,16 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    {{ for auction in {{ auctions }} }}
-
+    <ul>
+        {% for auction in auctions %}
+            <li>
+                {{ auction.title }}
+                {{ auction.description }}
+            </li>
+        {% empty %}
+            No listings
+        {% endfor %}
+    </ul>
 
     
 
