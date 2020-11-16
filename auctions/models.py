@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    watchlist = models.ManyToManyField("Auction", blank=True)
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -25,7 +25,4 @@ class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comments")
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="comments")
 
-class Watchlist_item(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
 
