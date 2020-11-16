@@ -5,8 +5,11 @@
     <ul>
         {% for auction in auctions %}
             <li>
-                {{ auction.title }}
+                <strong><a href="{% url 'view_listing' auction.title %}">{{ auction.title }}</a></strong> Created by {{ auction.creator.username }}
+                <br>
                 {{ auction.description }}
+                <br>
+                Starting bid: {{ auction.starting_bid }}
             </li>
         {% empty %}
             No listings

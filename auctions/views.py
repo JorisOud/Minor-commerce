@@ -106,3 +106,8 @@ def create_listing(request):
     return render(request, "auctions/create_listing.html", {
         "form": form
     })
+
+def view_listing(request, listing_title):
+    return render(request, "auctions/view_listing.html", {
+        "auction": Auction.objects.filter(title=listing_title).first()
+    })

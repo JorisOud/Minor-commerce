@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ auction.title }}</h2>
+    Created by {{ auction.creator.username }}
+    <br>
+    {{ auction.description }}
+    <br>
+    Starting bid: {{ auction.starting_bid }}
+
+{% endblock %}
