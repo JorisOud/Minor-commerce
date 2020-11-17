@@ -31,8 +31,9 @@ class New_listing_form(forms.Form):
         label="Category", 
         widget=forms.Select(choices=Category.objects.values_list("name", "name").distinct()))
 
-def index(request, auctions=Auction.objects.all()):
+def index(request, page_title="Active Listings", auctions=Auction.objects.all()):
     return render(request, "auctions/index.html", {
+        "page_title": page_title,
         "auctions": auctions
     })
 
@@ -115,6 +116,11 @@ def view_listing(request, listing_title):
         "auction": Auction.objects.get(title=listing_title)
     })
 
-# def categories(request, category):
-#     category_obj = Category.objects.filter(name=category).first()
-#     return index(request, category_obj.category_auctions)
+def categories(request):
+    return render(request, "auctions/categories.html", {
+        "categories": Category.objects.all()
+    })
+
+def category(request, category):
+    category_obj = Category.objects.get(name=category)
+    return index(request, category_obj.name, category_obj.category_auctions.all())
