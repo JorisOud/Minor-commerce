@@ -10,6 +10,8 @@
                 {{ auction.description }}
                 <br>
                 Starting bid: {{ auction.starting_bid }}
+                <br>
+                Category: {{ auction.category.name }}
             </li>
         {% empty %}
             No listings
