@@ -29,7 +29,7 @@ class New_listing_form(forms.Form):
     starting_bid = forms.DecimalField(label="Starting Bid", max_digits=10, decimal_places=2)
     category = forms.CharField(
         label="Category", 
-        widget=forms.Select(choices=Category.objects.values_list("name", "name").distinct()))
+        widget=forms.Select(choices=Category.objects.values_list("id", "name").distinct()))
 
 def index(request, page_title="Active Listings", auctions=Auction.objects.all()):
     return render(request, "auctions/index.html", {
@@ -101,7 +101,7 @@ def create_listing(request):
             title = form.cleaned_data["title"],
             description = form.cleaned_data["description"],
             starting_bid = form.cleaned_data["starting_bid"],
-            category = Category.objects.get(name=form.cleaned_data["category"]),
+            category = Category.objects.get(pk=form.cleaned_data["category"]),
             creator = request.user
         )
         auction.save()
@@ -111,9 +111,22 @@ def create_listing(request):
         "form": form
     })
 
-def view_listing(request, listing_title):
+def view_listing(request, listing):
+    listing_obj = Auction.objects.get(pk=listing)
+    if request.method == "POST":
+        if "add" in request.POST:
+            request.user.watchlist.add(listing_obj)
+        elif "remove" in request.POST:
+            request.user.watchlist.remove(listing_obj)
+
+    if listing_obj in request.user.watchlist.all():
+        on_watchlist = True
+    else:
+        on_watchlist = False
+
     return render(request, "auctions/view_listing.html", {
-        "auction": Auction.objects.get(title=listing_title)
+        "auction": listing_obj,
+        "on_watchlist": on_watchlist
     })
 
 def categories(request):
@@ -122,5 +135,8 @@ def categories(request):
     })
 
 def category(request, category):
-    category_obj = Category.objects.get(name=category)
+    category_obj = Category.objects.get(pk=category)
     return index(request, category_obj.name, category_obj.category_auctions.all())
+
+def watchlist(request):
+    return index(request, "Watchlist", request.user.watchlist.all())

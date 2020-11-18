@@ -7,5 +7,20 @@
     {{ auction.description }}
     <br>
     Starting bid: {{ auction.starting_bid }}
-
+    <br>
+    Category: {{ auction.category.name }}
+    <br>
+    {% if on_watchlist == True %}
+        <form action="{% url 'view_listing' auction.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="remove">
+            <input type=submit value="Remove from watchlist">
+        </form>
+    {% else %}
+        <form action="{% url 'view_listing' auction.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="add">
+            <input type=submit value="Add to watchlist">
+        </form>
+    {% endif %}
 {% endblock %}
