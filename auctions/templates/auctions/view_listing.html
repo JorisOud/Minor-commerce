@@ -10,17 +10,33 @@
     <br>
     Category: {{ auction.category.name }}
     <br>
-    {% if on_watchlist == True %}
-        <form action="{% url 'view_listing' auction.id %}" method="POST">
-            {% csrf_token %}
+    <img id="view_image" src="{{ auction.image }}" alt="No image">
+    <form action="{% url 'view_listing' auction.id %}" method="POST">
+        {% csrf_token %}
+        {% if on_watchlist == True %}
             <input type="hidden" name="remove">
             <input type=submit value="Remove from watchlist">
-        </form>
-    {% else %}
-        <form action="{% url 'view_listing' auction.id %}" method="POST">
-            {% csrf_token %}
+        {% else %}
             <input type="hidden" name="add">
             <input type=submit value="Add to watchlist">
-        </form>
-    {% endif %}
+        {% endif %}
+    </form>
+    <br>
+    <strong>Current bids:</strong>
+    <ul>
+        {% for bid in current_bids %}
+            <li>
+                {{ bid.amount }} by {{ bid.creator.username }}
+            </li>
+        {% empty %}
+            No bids.
+        {% endfor %}
+    </ul>
+    <br>
+    <form action="{% url 'bid' auction.id %}" method="POST">
+        {% csrf_token %}
+        {{ bid_form }}
+        <input type="submit" value="Place bid">
+    </form>
+
 {% endblock %}

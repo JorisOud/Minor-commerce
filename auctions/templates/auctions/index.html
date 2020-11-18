@@ -5,13 +5,18 @@
     <ul>
         {% for auction in auctions %}
             <li>
-                <strong><a href="{% url 'view_listing' auction.id %}">{{ auction.title }}</a></strong> Created by {{ auction.creator.username }}
-                <br>
-                {{ auction.description }}
-                <br>
-                Starting bid: {{ auction.starting_bid }}
-                <br>
-                Category: {{ auction.category.name }}
+                <div id="listing_container">
+                    <div class="listing_info">
+                        <strong><a href="{% url 'view_listing' auction.id %}">{{ auction.title }}</a></strong> Created by {{ auction.creator.username }}
+                        <br>
+                        Starting bid: {{ auction.starting_bid }}
+                        <br>
+                        Category: {{ auction.category.name }}
+                    </div>
+                    <div>
+                        <img class="list_image" src="{{ auction.image }}" alt="No image">
+                    </div>
+                </div>
             </li>
         {% empty %}
             No listings

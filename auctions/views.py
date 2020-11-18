@@ -15,11 +15,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Auction, Category
+from .models import User, Auction, Category, Bid, Comment
 
 
 class New_listing_form(forms.Form):
-    """Creates a Django form to create a new wiki page. Attrubutes:
+    """Creates a Django form to create a new listing. Attrubutes:
       - title(string): The title of the auction.
       - description(string): Description of the auction.
       - starting_bid(float): Mininmum price of the auction."""
@@ -30,13 +30,19 @@ class New_listing_form(forms.Form):
     category = forms.CharField(
         label="Category", 
         widget=forms.Select(choices=Category.objects.values_list("id", "name").distinct()))
+    image = forms.URLField(required=False)
+
+class Bid_form(forms.Form):
+    """Creates a Django form to create a new listing. Attrubutes:
+      - amount(float): The amount of the bid."""
+
+    amount = forms.DecimalField(label="Bid on this item", max_digits=10, decimal_places=2)
 
 def index(request, page_title="Active Listings", auctions=Auction.objects.all()):
     return render(request, "auctions/index.html", {
         "page_title": page_title,
         "auctions": auctions
     })
-
 
 def login_view(request):
     if request.method == "POST":
@@ -102,6 +108,7 @@ def create_listing(request):
             description = form.cleaned_data["description"],
             starting_bid = form.cleaned_data["starting_bid"],
             category = Category.objects.get(pk=form.cleaned_data["category"]),
+            image = form.cleaned_data["image"],
             creator = request.user
         )
         auction.save()
@@ -111,22 +118,55 @@ def create_listing(request):
         "form": form
     })
 
-def view_listing(request, listing):
+
+
+def bid(request, listing):
     listing_obj = Auction.objects.get(pk=listing)
-    if request.method == "POST":
-        if "add" in request.POST:
-            request.user.watchlist.add(listing_obj)
-        elif "remove" in request.POST:
-            request.user.watchlist.remove(listing_obj)
 
     if listing_obj in request.user.watchlist.all():
         on_watchlist = True
     else:
         on_watchlist = False
 
+    form = Bid_form(request.POST)
+
+    if form.is_valid():
+        new_bid = Bid(
+            amount = form.cleaned_data["amount"],
+            creator = request.user,
+            auction = listing_obj
+            )
+        new_bid.save()
+        return HttpResponseRedirect(reverse("view_listing", args=[listing_obj.id]))
+    else:
+        return render(request, "auctions/view_listing.html", {
+            "auction": listing_obj,
+            "on_watchlist": on_watchlist,
+            "bid_form": form
+        })
+
+def view_listing(request, listing):
+    listing_obj = Auction.objects.get(pk=listing)
+    if request.method == "POST":
+        if "add" in request.POST:
+            request.user.watchlist.add(listing_obj)
+            return HttpResponseRedirect(reverse("view_listing", args=[listing]))
+        elif "remove" in request.POST:
+            request.user.watchlist.remove(listing_obj)
+            return HttpResponseRedirect(reverse("view_listing", args=[listing]))
+
+    if listing_obj in request.user.watchlist.all():
+        on_watchlist = True
+    else:
+        on_watchlist = False
+
+    current_bids = listing_obj.auction_bids.all()
+
     return render(request, "auctions/view_listing.html", {
         "auction": listing_obj,
-        "on_watchlist": on_watchlist
+        "on_watchlist": on_watchlist,
+        "bid_form": Bid_form(),
+        "current_bids": current_bids
     })
 
 def categories(request):

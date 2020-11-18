@@ -1,3 +1,27 @@
 body {
     padding: 10px;
 }
+
+.list_image {
+    max-height: 130px;
+    margin-left: 10px;
+}
+
+.listing_info {
+    width: 400px;
+    min-height: 130px;
+    max-height: 500px;
+    background-color: rgb(253, 251, 219);
+    padding: 20px;
+}
+
+#listing_container {
+    display: flex;
+    padding-top: 10px;
+}
+
+#view_image {
+    max-height: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
