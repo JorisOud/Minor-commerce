@@ -7,7 +7,7 @@
             <li>
                 <div id="listing_container">
                     <div class="listing_info">
-                        <strong><a href="{% url 'view_listing' auction.id %}">{{ auction.title }}</a></strong> Created by {{ auction.creator.username }}
+                        <strong><a href="{% url 'auctions:view_listing' auction.id %}">{{ auction.title }}</a></strong> Created by {{ auction.creator.username }}
                         <br>
                         Starting bid: {{ auction.starting_bid }}
                         <br>

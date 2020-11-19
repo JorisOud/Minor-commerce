@@ -11,7 +11,7 @@
     Category: {{ auction.category.name }}
     <br>
     <img id="view_image" src="{{ auction.image }}" alt="No image">
-    <form action="{% url 'view_listing' auction.id %}" method="POST">
+    <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
         {% csrf_token %}
         {% if on_watchlist == True %}
             <input type="hidden" name="remove">
@@ -33,7 +33,7 @@
         {% endfor %}
     </ul>
     <br>
-    <form action="{% url 'bid' auction.id %}" method="POST">
+    <form action="{% url 'auctions:bid' auction.id %}" method="POST">
         {% csrf_token %}
         {{ bid_form }}
         <input type="submit" value="Place bid">

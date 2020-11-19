@@ -8,7 +8,7 @@ body {
 }
 
 .listing_info {
-    width: 400px;
+    width: 800px;
     min-height: 130px;
     max-height: 500px;
     background-color: rgb(253, 251, 219);

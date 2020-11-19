@@ -55,7 +55,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("auctions:index"))
         else:
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
@@ -66,7 +66,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("auctions:index"))
 
 
 def register(request):
@@ -91,7 +91,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("auctions:index"))
     else:
         return render(request, "auctions/register.html")
 
@@ -112,13 +112,11 @@ def create_listing(request):
             creator = request.user
         )
         auction.save()
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("auctions:index"))
 
     return render(request, "auctions/create_listing.html", {
         "form": form
     })
-
-
 
 def bid(request, listing):
     listing_obj = Auction.objects.get(pk=listing)
@@ -137,7 +135,7 @@ def bid(request, listing):
             auction = listing_obj
             )
         new_bid.save()
-        return HttpResponseRedirect(reverse("view_listing", args=[listing_obj.id]))
+        return HttpResponseRedirect(reverse("auctions:view_listing", args=[listing_obj.id]))
     else:
         return render(request, "auctions/view_listing.html", {
             "auction": listing_obj,
@@ -150,10 +148,10 @@ def view_listing(request, listing):
     if request.method == "POST":
         if "add" in request.POST:
             request.user.watchlist.add(listing_obj)
-            return HttpResponseRedirect(reverse("view_listing", args=[listing]))
+            return HttpResponseRedirect(reverse("auctions:view_listing", args=[listing]))
         elif "remove" in request.POST:
             request.user.watchlist.remove(listing_obj)
-            return HttpResponseRedirect(reverse("view_listing", args=[listing]))
+            return HttpResponseRedirect(reverse("auctions:view_listing", args=[listing]))
 
     if listing_obj in request.user.watchlist.all():
         on_watchlist = True
