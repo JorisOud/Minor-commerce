@@ -10,7 +10,8 @@
     <br>
     Category: {{ auction.category.name }}
     <br>
-    <img id="view_image" src="{{ auction.image }}" alt="No image">
+    <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
+    this.src='//thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg'" alt="">
     <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
         {% csrf_token %}
         {% if on_watchlist == True %}

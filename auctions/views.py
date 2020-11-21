@@ -10,6 +10,7 @@
 
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -34,14 +35,40 @@ class New_listing_form(forms.Form):
 
 class Bid_form(forms.Form):
     """Creates a Django form to create a new listing. Attrubutes:
-      - amount(float): The amount of the bid."""
+      - amount(float): The amount of the bid.
+      keyword argument:
+      - listing(string): Id of the listing object that the bid is related to."""
 
     amount = forms.DecimalField(label="Bid on this item", max_digits=10, decimal_places=2)
 
-def index(request, page_title="Active Listings", auctions=Auction.objects.all()):
+    def __init__(self, *args, **kwargs):
+        listing = kwargs.pop('listing')
+        super(Bid_form, self).__init__(*args, **kwargs)
+        self.listing = listing
+
+    def clean_amount(self):
+        """Raises a ValidationError if the bid amount is lower than the starting bid
+          or lower than or equal to a previous bid."""
+
+        amount = self.cleaned_data["amount"]
+        listing_obj = Auction.objects.get(pk=self.listing)
+
+        if listing_obj.auction_bids.last() == None:
+            if amount < listing_obj.starting_bid:
+                raise ValidationError("Error: Bid is lower than the starting bid.")
+        else:
+            if amount <= listing_obj.auction_bids.last().amount:
+                raise ValidationError("Error: Bid must be higher than the previous bids.")
+            
+        return amount
+
+def index(request, page_title="Active Listings", auctions=None):
+    if auctions == None:
+        auctions = Auction.objects.all()
+
     return render(request, "auctions/index.html", {
         "page_title": page_title,
-        "auctions": auctions
+        "auctions": auctions,
     })
 
 def login_view(request):
@@ -126,7 +153,8 @@ def bid(request, listing):
     else:
         on_watchlist = False
 
-    form = Bid_form(request.POST)
+    form = Bid_form(request.POST, listing=listing)
+    current_bids = listing_obj.auction_bids.all()
 
     if form.is_valid():
         new_bid = Bid(
@@ -140,7 +168,8 @@ def bid(request, listing):
         return render(request, "auctions/view_listing.html", {
             "auction": listing_obj,
             "on_watchlist": on_watchlist,
-            "bid_form": form
+            "bid_form": form,
+            "current_bids": current_bids
         })
 
 def view_listing(request, listing):
@@ -163,7 +192,7 @@ def view_listing(request, listing):
     return render(request, "auctions/view_listing.html", {
         "auction": listing_obj,
         "on_watchlist": on_watchlist,
-        "bid_form": Bid_form(),
+        "bid_form": Bid_form(listing=listing),
         "current_bids": current_bids
     })
 
