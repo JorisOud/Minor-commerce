@@ -15,7 +15,7 @@ body {
 }
 
 .listing_info {
-    width: 800px;
+    width: 600px;
     min-height: 130px;
     max-height: 500px;
     background-color: rgb(253, 251, 219);
@@ -31,8 +31,13 @@ body {
 }
 
 #listing_container {
+    width: 900px;
     display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
     padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgb(253, 251, 219);
 }
 
 #view_image {
