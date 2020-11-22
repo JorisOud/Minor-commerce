@@ -3,7 +3,15 @@
 {% block body %}
     <div id="listing_page_container">
         <div class="listing_page_info">
-            <h2>{{ auction.title }}</h2>
+            <h2>
+                {{ auction.title }}
+                {% if auction.is_active == False %}
+                (listing closed)
+                {% endif %}
+                {% if listing_won == True %}
+                    You have won this listing!
+                {% endif %}
+            </h2>
             Created by {{ auction.creator.username }}
             {{ auction.description }}
             <br>
@@ -11,6 +19,7 @@
             <br>
             Category: {{ auction.category.name }}
             <br>
+
             <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
                 {% csrf_token %}
                 {% if on_watchlist == True %}
@@ -22,9 +31,19 @@
                 {% endif %}
             </form>
             <br>
+            <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
+                {% csrf_token %}
+                {% if own_listing == True and auction.is_active == True%}
+                <input type="hidden" name="close">
+                <input type=submit value="Close listing">
+                {% endif %}
+            </form>
+
+            <br>
             <strong>Bids:</strong>
             <br>
             Starting bid: {{ auction.starting_bid }}
+
             <ul>
                 {% for bid in current_bids %}
                     <li>
@@ -35,20 +54,24 @@
                 {% endfor %}
             </ul>
             <br>
+
             <form action="{% url 'auctions:bid' auction.id %}" method="POST">
                 {% csrf_token %}
                 {{ bid_form }}
                 <input type="submit" value="Place bid">
             </form>
+
         </div>
         <div>
             <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
-            this.src='//thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg'" alt="">
+            this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
         </div>
     </div>
+
     <br>
     <strong>Comments:</strong>
     <br>
+
     <ul>
         {% for comment in comments %}
             <li>
@@ -60,6 +83,7 @@
             No comments.
         {% endfor %}
     </ul>
+
     <br>
     <form action="{% url 'auctions:comment' auction.id %}" method="POST">
         {% csrf_token %}

@@ -7,15 +7,20 @@
             <li>
                 <div id="listing_container">
                     <div class="listing_info">
-                        <strong><a href="{% url 'auctions:view_listing' auction.id %}">{{ auction.title }}</a></strong>
+                        <strong><a href="{% url 'auctions:view_listing' auction.id %}">
+                            {{ auction.title }}
+                            {% if auction.is_active == False %}
+                            (listing closed)
+                            {% endif %}
+                        </a></strong>
                         Created by {{ auction.creator.username }}
                         <br>
                         Current price: {{ auction.current_price }}
                         <br>
                         Category: {{ auction.category.name }}
                     </div>
-                    <div>
-                        <img class="list_image" src="{{ auction.image }}" onerror="this.onerror=null; this.src='//thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg'" alt="">
+                    <div class="list_image_container">
+                        <img class="list_image" src="{{ auction.image }}" onerror="this.onerror=null; this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
                     </div>
                 </div>
             </li>
@@ -23,7 +28,4 @@
             No listings
         {% endfor %}
     </ul>
-
-    
-
 {% endblock %}

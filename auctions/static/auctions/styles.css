@@ -4,7 +4,14 @@ body {
 
 .list_image {
     max-height: 130px;
+    max-width: 250px;
     margin-left: 10px;
+}
+
+.list_image_container {
+    width: 260px;
+    text-align: center;
+    
 }
 
 .listing_info {
