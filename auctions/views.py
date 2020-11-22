@@ -177,6 +177,7 @@ def view_listing(request, listing):
             return redirect("auctions:view_listing", listing)
         elif "close" in request.POST:
             listing_obj.is_active = False
+            listing_obj.won_by = listing_obj.auction_bids.last().creator
             listing_obj.save()
             return redirect("auctions:view_listing", listing)
 
@@ -190,8 +191,9 @@ def view_listing(request, listing):
     if listing_obj.creator == request.user:
         own_listing = True
 
-    if listing_obj.auction_bids.last().creator == request.user:
-        listing_won =True
+    if listing_obj.auction_bids.all():
+        if listing_obj.auction_bids.last().creator == request.user:
+            listing_won =True
 
     current_bids = listing_obj.auction_bids.all()
     comments = listing_obj.comments.all()
@@ -219,8 +221,7 @@ def category(request, category):
 def watchlist(request):
     return index(request, "Watchlist", request.user.watchlist.all())
 
-def your_listings(request):
-    pass
-
-def won_listings(request):
-    pass
+def my_listings(request):
+    my_auctions = request.user.auctions.all()
+    my_auctions |= Auction.objects.filter(won_by=request.user)
+    return index(request, "Listings you have created or won", my_auctions)

@@ -8,11 +8,15 @@
                 {% if auction.is_active == False %}
                 (listing closed)
                 {% endif %}
+                <br>
                 {% if listing_won == True %}
                     You have won this listing!
                 {% endif %}
             </h2>
             Created by {{ auction.creator.username }}
+            <br>
+            <strong>Description:</strong>
+            <br>
             {{ auction.description }}
             <br>
             Current price: {{ auction.current_price }}
@@ -39,7 +43,6 @@
                 {% endif %}
             </form>
 
-            <br>
             <strong>Bids:</strong>
             <br>
             Starting bid: {{ auction.starting_bid }}
@@ -52,8 +55,7 @@
                 {% empty %}
                     No bids.
                 {% endfor %}
-            </ul>
-            <br>
+            </ul>            
 
             <form action="{% url 'auctions:bid' auction.id %}" method="POST">
                 {% csrf_token %}
