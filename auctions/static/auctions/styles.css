@@ -15,6 +15,14 @@ body {
     padding: 20px;
 }
 
+.listing_page_info {
+    width: 600px;
+}
+
+#listing_page_container {
+    display: flex;
+}
+
 #listing_container {
     display: flex;
     padding-top: 10px;

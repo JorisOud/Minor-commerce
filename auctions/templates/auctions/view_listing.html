@@ -1,43 +1,69 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>{{ auction.title }}</h2>
-    Created by {{ auction.creator.username }}
+    <div id="listing_page_container">
+        <div class="listing_page_info">
+            <h2>{{ auction.title }}</h2>
+            Created by {{ auction.creator.username }}
+            {{ auction.description }}
+            <br>
+            Current price: {{ auction.current_price }}
+            <br>
+            Category: {{ auction.category.name }}
+            <br>
+            <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
+                {% csrf_token %}
+                {% if on_watchlist == True %}
+                    <input type="hidden" name="remove">
+                    <input type=submit value="Remove from watchlist">
+                {% else %}
+                    <input type="hidden" name="add">
+                    <input type=submit value="Add to watchlist">
+                {% endif %}
+            </form>
+            <br>
+            <strong>Bids:</strong>
+            <br>
+            Starting bid: {{ auction.starting_bid }}
+            <ul>
+                {% for bid in current_bids %}
+                    <li>
+                        {{ bid.amount }} by {{ bid.creator.username }}
+                    </li>
+                {% empty %}
+                    No bids.
+                {% endfor %}
+            </ul>
+            <br>
+            <form action="{% url 'auctions:bid' auction.id %}" method="POST">
+                {% csrf_token %}
+                {{ bid_form }}
+                <input type="submit" value="Place bid">
+            </form>
+        </div>
+        <div>
+            <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
+            this.src='//thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg'" alt="">
+        </div>
+    </div>
     <br>
-    {{ auction.description }}
+    <strong>Comments:</strong>
     <br>
-    Starting bid: {{ auction.starting_bid }}
-    <br>
-    Category: {{ auction.category.name }}
-    <br>
-    <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
-    this.src='//thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg'" alt="">
-    <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
-        {% csrf_token %}
-        {% if on_watchlist == True %}
-            <input type="hidden" name="remove">
-            <input type=submit value="Remove from watchlist">
-        {% else %}
-            <input type="hidden" name="add">
-            <input type=submit value="Add to watchlist">
-        {% endif %}
-    </form>
-    <br>
-    <strong>Current bids:</strong>
     <ul>
-        {% for bid in current_bids %}
+        {% for comment in comments %}
             <li>
-                {{ bid.amount }} by {{ bid.creator.username }}
+                {{ comment.creator.username }}:
+                <br>
+                {{ comment.comment_content }}
             </li>
         {% empty %}
-            No bids.
+            No comments.
         {% endfor %}
     </ul>
     <br>
-    <form action="{% url 'auctions:bid' auction.id %}" method="POST">
+    <form action="{% url 'auctions:comment' auction.id %}" method="POST">
         {% csrf_token %}
-        {{ bid_form }}
-        <input type="submit" value="Place bid">
+        {{ comment_form }}
+        <input type="submit" value="Add comment">
     </form>
-
 {% endblock %}
