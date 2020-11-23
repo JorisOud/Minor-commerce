@@ -6,11 +6,11 @@
             <h2>
                 {{ auction.title }}
                 {% if auction.is_active == False %}
-                (listing closed)
-                {% endif %}
-                <br>
-                {% if listing_won == True %}
-                    You have won this listing!
+                    (listing closed)
+                    <br>
+                    {% if listing_won == True %}
+                        You have won this listing!
+                    {% endif %}
                 {% endif %}
             </h2>
             Created by {{ auction.creator.username }}
