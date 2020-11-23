@@ -30,7 +30,7 @@ body {
     display: flex;
 }
 
-#listing_container {
+.listing_container {
     width: 900px;
     display: flex;
     margin-top: 10px;

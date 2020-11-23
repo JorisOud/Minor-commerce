@@ -56,13 +56,13 @@
                     No bids.
                 {% endfor %}
             </ul>            
-
-            <form action="{% url 'auctions:bid' auction.id %}" method="POST">
-                {% csrf_token %}
-                {{ bid_form }}
-                <input type="submit" value="Place bid">
-            </form>
-
+            {% if own_listing == False %}
+                <form action="{% url 'auctions:bid' auction.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ bid_form }}
+                    <input type="submit" value="Place bid">
+                </form>
+            {% endif %}
         </div>
         <div>
             <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
@@ -73,7 +73,6 @@
     <br>
     <strong>Comments:</strong>
     <br>
-
     <ul>
         {% for comment in comments %}
             <li>

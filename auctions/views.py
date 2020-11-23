@@ -18,13 +18,14 @@ from .forms import New_listing_form, Bid_form, Comment_form
 from .models import User, Auction, Category, Bid, Comment
 
 
-def index(request, page_title="Active Listings", auctions=None):
+def index(request, page_title="Active Listings", auctions=None, won_listings=None):
     if auctions == None:
         auctions = Auction.objects.filter(is_active=True)
 
     return render(request, "auctions/index.html", {
         "page_title": page_title,
         "auctions": auctions,
+        "won_listings": won_listings
     })
 
 def login_view(request):
@@ -223,5 +224,8 @@ def watchlist(request):
 
 def my_listings(request):
     my_auctions = request.user.auctions.all()
-    my_auctions |= Auction.objects.filter(won_by=request.user)
-    return index(request, "Listings you have created or won", my_auctions)
+    won_auctions = None
+    if Auction.objects.filter(won_by=request.user):
+        won_auctions = Auction.objects.filter(won_by=request.user)
+    # my_auctions |= Auction.objects.filter(won_by=request.user)
+    return index(request, "Listings you have created", my_auctions, won_auctions)

@@ -2,10 +2,11 @@
 
 {% block body %}
     <h2>{{ page_title }}</h2>
+
     <ul>
         {% for auction in auctions %}
             <li>
-                <div id="listing_container">
+                <div class="listing_container">
                     <div class="listing_info">
                         <strong><a href="{% url 'auctions:view_listing' auction.id %}">
                             {{ auction.title }}
@@ -20,7 +21,8 @@
                         Category: {{ auction.category.name }}
                     </div>
                     <div class="list_image_container">
-                        <img class="list_image" src="{{ auction.image }}" onerror="this.onerror=null; this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
+                        <img class="list_image" src="{{ auction.image }}" onerror="this.onerror=null;
+                        this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
                     </div>
                 </div>
             </li>
@@ -28,4 +30,33 @@
             No listings
         {% endfor %}
     </ul>
+
+    {% if won_listings != None %}
+        <h2>Listings you have won</h2>
+        <ul>
+            {% for auction in won_listings %}
+                <li>
+                    <div class="listing_container">
+                        <div class="listing_info">
+                            <strong><a href="{% url 'auctions:view_listing' auction.id %}">
+                                {{ auction.title }}
+                                {% if auction.is_active == False %}
+                                (listing closed)
+                                {% endif %}
+                            </a></strong>
+                            Created by {{ auction.creator.username }}
+                            <br>
+                            Current price: {{ auction.current_price }}
+                            <br>
+                            Category: {{ auction.category.name }}
+                        </div>
+                        <div class="list_image_container">
+                            <img class="list_image" src="{{ auction.image }}" onerror="this.onerror=null;
+                            this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
