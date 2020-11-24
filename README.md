@@ -18,6 +18,8 @@ pip3 install pylint-django
 
 go to User Settings and add:
 
-'''{"python.linting.pylintArgs": [
+'''
+{"python.linting.pylintArgs": [
      "--load-plugins=pylint_django"
-],}'''
+],}
+'''
