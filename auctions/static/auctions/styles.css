@@ -45,3 +45,16 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+#id_content {
+    height: 80px;
+}
+
+#submit_form {
+    margin-top: 10px;
+}
+
+ul
+{
+list-style-type: none;
+}

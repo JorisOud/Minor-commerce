@@ -5,6 +5,10 @@ from .models import Auction
 
 
 def render_listing(request, listing, bid_form=None, comment_form=Comment_form()):
+    """Retrieves all variables needed to render the listing page, and renders it.
+      Needs the request and listing id as arguments and accepts bid_form and 
+      comment_form as optional named arguments."""
+
     listing_obj = Auction.objects.get(pk=listing)
 
     if bid_form == None:

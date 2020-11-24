@@ -4,6 +4,7 @@
     <h2>Categories</h2>
     <ul>
         {% for category in categories %}
+            <br>
             <li>
                 <strong><a href="{% url 'auctions:category' category.id %}">{{ category.name }}</a></strong>
             </li>
