@@ -12,15 +12,12 @@ For this application to work, install the following:
 - pip
 - Django
 
-
-
-
 **if the error 'Class has no objects member' occurs:**
 
 pip3 install pylint-django
 
 go to User Settings and add:
 
-{"python.linting.pylintArgs": [
+'{"python.linting.pylintArgs": [
      "--load-plugins=pylint_django"
-],}
+],}'
