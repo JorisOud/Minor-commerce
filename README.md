@@ -1,6 +1,6 @@
 (Design document staat in DESIGN.md)
 
-# Application Name
+# Auctions
 
 This application creates an auction website that allows users to create auction listings, 
 view active listings of other users, sort them by category and bid and comment on them.
@@ -8,9 +8,11 @@ view active listings of other users, sort them by category and bid and comment o
 ## Getting Started
 
 For this application to work, install the following:
-Python3
-pip
-Django
+- Python3
+- pip
+- Django
+
+
 
 
 **if the error 'Class has no objects member' occurs:**
