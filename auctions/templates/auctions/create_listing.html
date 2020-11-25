@@ -5,16 +5,9 @@
 
     <form action="{% url 'auctions:create_listing' %}" method="POST">
         {% csrf_token %}
-        {{ form.title.label_tag }}<br>
-        {{ form.title }}<br>
-        {{ form.description.label_tag }}<br>
-        {{ form.description }}<br>
-        {{ form.starting_bid.label_tag }}<br>
-        {{ form.starting_bid }}<br>
-        {{ form.category.label_tag }}<br>
-        {{ form.category }}<br>
-        {{ form.image.label_tag }}<br>
-        {{ form.image }}<br>
+        <table>
+            {{ form.as_table }}
+        </table>
         <input id="submit_form" type="submit" value="Save Page">
     </form>
 {% endblock %}

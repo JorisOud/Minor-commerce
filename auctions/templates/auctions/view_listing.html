@@ -5,10 +5,10 @@
         <div class="listing_page_info">
             <h2>
                 {{ auction.title }}
-                {% if auction.is_active == False %}
+                {% if not auction.is_active %}
                     (listing closed)
                     <br>
-                    {% if listing_won == True %}
+                    {% if listing_won %}
                         You have won this listing!
                     {% endif %}
                 {% endif %}
@@ -34,7 +34,9 @@
                     <input type=submit value="Add to watchlist">
                 {% endif %}
             </form>
+
             <br>
+
             <form action="{% url 'auctions:view_listing' auction.id %}" method="POST">
                 {% csrf_token %}
                 {% if own_listing == True and auction.is_active == True%}
@@ -55,8 +57,9 @@
                 {% empty %}
                     No bids.
                 {% endfor %}
-            </ul>            
-            {% if own_listing == False %}
+            </ul>
+
+            {% if not own_listing %}
                 <form action="{% url 'auctions:bid' auction.id %}" method="POST">
                     {% csrf_token %}
                     {{ bid_form }}
@@ -64,6 +67,7 @@
                 </form>
             {% endif %}
         </div>
+
         <div>
             <img id="view_image" src="{{ auction.image }}" onerror="this.onerror=null; 
             this.src='https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png'" alt="">
@@ -84,8 +88,8 @@
             No comments.
         {% endfor %}
     </ul>
-
     <br>
+
     <form action="{% url 'auctions:comment' auction.id %}" method="POST">
         {% csrf_token %}
         {{ comment_form }}

@@ -10,7 +10,7 @@
                     <div class="listing_info">
                         <strong><a href="{% url 'auctions:view_listing' auction.id %}">
                             {{ auction.title }}
-                            {% if auction.is_active == False %}
+                            {% if not auction.is_active %}
                             (listing closed)
                             {% endif %}
                         </a></strong>
@@ -31,7 +31,7 @@
         {% endfor %}
     </ul>
 
-    {% if won_listings != None %}
+    {% if won_listings %}
         <h2>Listings you have won</h2>
         <ul>
             {% for auction in won_listings %}
@@ -40,7 +40,7 @@
                         <div class="listing_info">
                             <strong><a href="{% url 'auctions:view_listing' auction.id %}">
                                 {{ auction.title }}
-                                {% if auction.is_active == False %}
+                                {% if not auction.is_active %}
                                 (listing closed)
                                 {% endif %}
                             </a></strong>
